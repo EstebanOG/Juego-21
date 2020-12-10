@@ -1,7 +1,7 @@
 # Juego-21
 
 ## Descripción
-
+A continuación presentaremos un tutorial de como realizar pruebas de usuario mediante el juego de 21 utilizando la herramienta de *behave*, 
 ## Historias de usuario juego 21
 
 __Estructura:__
@@ -23,7 +23,7 @@ El desarrollo impulsado por el comportamiento (o BDD) es una técnica de desarro
 *behave* utiliza pruebas escritas en un estilo de lenguaje natural, respaldado por código Python.
 
 Primero, install *behave*.
- #### Instalación
+ ### Instalación
 
 ```
 ~$ pip install behave
@@ -31,7 +31,6 @@ Primero, install *behave*.
 
 Ahora cree un directorio llamado "Features/". En ese directorio, cree un archivo llamado "carta.feature" que contenga:
 
-.. code-block:: gherkin
 
     # -- FILE: Features/carta.feature
     Feature: Carta del 21
@@ -39,9 +38,9 @@ Ahora cree un directorio llamado "Features/". En ese directorio, cree un archivo
     Como jugador quiero determinar el valor de una carta para determinar el valor de la mano.
 
     Scenario Outline: determinar valor carta
-    Given una <carta> para saber su valor
-    When el jugador quiere saber su valor
-    Then el <valor> de la carta es correcto
+        Given una <carta> para saber su valor
+        When el jugador quiere saber su valor
+        Then el <valor> de la carta es correcto
 
     Examples:
         | carta | valor | 
@@ -53,8 +52,6 @@ Ahora cree un directorio llamado "Features/". En ese directorio, cree un archivo
         | K, picas  | 10  |
 
 Cree un nuevo directorio llamado "Features/Steps/". En ese directorio, cree un archivo llamado "steps_carta.py" que contenga:
-
-.. code-block:: python
 
     # -- FILE: Features/Steps/steps_carta.py
     from behave import *
@@ -74,8 +71,6 @@ Cree un nuevo directorio llamado "Features/Steps/". En ese directorio, cree un a
         assert context.valor == valor
 
 Ejecutar behave:
-
-.. code-block:: console
 
     $ behave
     Feature: Carta del 21 # features/carta.feature:1
@@ -114,7 +109,74 @@ Ejecutar behave:
     6 scenarios passed, 0 failed, 0 skipped
     18 steps passed, 0 failed, 0 skipped, 0 undefined
 
-#### Equipo de trabajo
+### Features
+*behave* opera en directorios que contienen:
+
+1. *feature files* escritos por su analista de negocios / patrocinador / quien sea con sus escenarios de comportamiento en él, y
+2. un directorio de "steps" con *Python step implementations* para los escenarios.
+
+El requisito mínimo para un directorio de características es:
+
+    features/
+    features/carta.feature
+    features/steps/
+    features/steps/steps_carta.py
+
+### Feature Files
+Un *feature file* tiene un formato de lenguaje natural que describe una característica o parte de una característica con ejemplos representativos de los resultados esperados. Son de texto sin formato (codificados en UTF-8) y se parecen a:
+
+    Feature: barajar al inicio
+        
+        Como repartidor quiero barajar las cartas para iniciar el juego.
+
+    Scenario: barajar
+        Given un mazo para jugar 21
+        When el repartidor baraja el mazo
+        Then las cartas 5 y 10 no son iguales
+        And la catidad de cartas es 52
+
+Las partes “Given”, “When” y “Then” de esta prosa forman los pasos reales que tomará el comportamiento para probar su sistema. Estos se asignan a implementaciones de pasos de Python . Como guía general:
+
+*Given* ponemos el sistema en un estado conocido antes de que el usuario (o sistema externo) comience a interactuar con el sistema (en los pasos Cuándo). Evite hablar de la interacción del usuario en situaciones dadas.
+
+*When* tomamos acciones clave que el usuario (o sistema externo) lleva a cabo. Esta es la interacción con su sistema que debería (o tal vez no debería) hacer que algún estado cambie.
+
+*Then* observamos los resultados.
+
+También puede incluir "And" o "But" como un step; se les cambia el nombre por behave para tomar el nombre del paso anterior, por lo que:
+
+    Scenario: barajar
+        Given un mazo para jugar 21
+        When el repartidor baraja el mazo
+        Then las cartas 5 y 10 no son iguales
+        And la catidad de cartas es 52
+### Scenario Outlines
+A veces, un scenario debe ejecutarse con una serie de variables que proporcionen un conjunto de estados conocidos, acciones a tomar y resultados esperados, todos utilizando las mismas acciones básicas. Puede utilizar un esquema de escenario para lograr esto:
+
+    Feature: Carta del 21
+
+    Como jugador quiero determinar el valor de una carta para determinar el valor de la mano.
+
+    Scenario Outline: determinar valor carta
+        Given una <carta> para saber su valor
+        When el jugador quiere saber su valor
+        Then el <valor> de la carta es correcto
+
+    Examples:
+        | carta | valor | 
+        | 2, picas  | 2  |
+        | A, corazones  | 1  |
+        | 8, treboles  | 8  |
+        | J, picas  | 10  |
+        | Q, picas  | 10  |
+        | K, picas  | 10  |
+
+behave ejecutará el scenario una vez por cada línea (sin encabezado) que aparezca en las tablas de datos de ejemplo.
+### Python Step Implementations
+
+### Context
+
+### Equipo de trabajo
 
 Integrante  | Código
 ------------- | -------------
