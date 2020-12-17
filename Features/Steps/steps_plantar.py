@@ -1,16 +1,14 @@
 from behave import *
 from mano import Mano
 
-@given('una {mano} para plantarse')
-def implementacion(context,mano):
-    context.mano=Mano()
-    context.mano.mano_con_lista(mano.split(";"))
-    context.plantar="False"
+@given('mi {mano} para plantarme')
+def step(context,mano):
+    context.mano=Mano(mano.split(";"))
 
-@when('el {valor:d} de la mano es >= que 18')
-def implementacion(context,valor):
-    context.plantar=str(context.mano.plantar(valor))
+@when('el {valor:d} de mi mano es <= que 21')
+def step(context,valor):
+    context.plantar=str(context.mano.comprobar_juego(valor))
 
-@then('{plantar} es correcto')
-def implementacion(context,plantar):
+@then('me puedo {plantar}')
+def step(context,plantar):
     assert context.plantar == plantar

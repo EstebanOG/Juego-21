@@ -21,3 +21,9 @@ class Mano:
             if c.evaluar() == 1:
                 return True
         return False
+
+    def comprobar_juego(self,valor):
+        return (valor<=21)
+
+    def agregar_carta(self,valor,pinta):
+        self.cartas.append(Carta(valor, pinta))

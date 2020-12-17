@@ -35,7 +35,6 @@ BACKGROUND | Ocasionalmente, te encontrarás repitiendo los mismos GIVEN en much
 SCENARIO OUTLINE | El SCENARIO OUTLINE se puede usar para ejecutar varios SCENARIO varias veces, con diferentes combinaciones de valores.
 """ | Doc Strings o “”” es útil si necesitas añadir mucha información a los patrones.
 @ | Prefijo para una etiqueta: @. Las etiquetas pueden ser colocadas antes de los patrones o SCENARIO. El objetivo principal es ayudarte a filtrar SCENARIOs.
-# | Para definir comentarios. Solo se permiten al comienzo de una nueva línea.
 
 
 Estos elementos nos ayudan a que todos esos comportamientos vayan poco a poco bajando de nivel, hasta llegar a un lenguaje que entiendan fácilmente los desarrolladores.
