@@ -1,7 +1,7 @@
 # Juego-21
 
 ## Descripción
-A continuación presentaremos un tutorial de como realizar pruebas de usuario mediante el juego de 21 utilizando la herramienta de *behave*, 
+A continuación presentaremos un tutorial de como realizar pruebas de aceptación mediante el juego de 21 utilizando la herramienta de *behave*, 
 ## Historias de usuario juego 21
 
 __Estructura:__
@@ -16,6 +16,29 @@ Como __ROL__ quiero __ACCIÓN__ para __FUNCIONALIDAD__
 - Como repartidor quiero barajar las cartas para iniciar el juego. 
 - Como repartidor quiero saber el valor de las manos para determinar quién gana. 
 
+## Gherkin
+
+Gherkin es un DSL o Lenguaje Específico de Dominio (Domain-Specific Languaje), es decir, un lenguaje que está creado para resolver un problema.
+
+Tiene una estructura generada por varios elementos, como vemos en la siguiente tabla.
+
+Sintaxis  | Propósito
+------------- | -------------
+FEATURE | El propósito del FEATURE es proporcionar una descripción de alto nivel de una de las funciones de software y agrupar SCENARIOs relacionados.
+SCENARIO o EXAMPLE | Un SCENARIO es un ejemplo concreto que contiene una regla de negocio. Consiste básicamente en una definición en el patrón ‘Given-When-Then’.
+GIVEN | GIVEN es parte de patrón ‘Given-When-Then’. Se utilizan para describir el contexto inicial del sistema: la escena del escenario. El propósito de los Given es poner el sistema en un estado concreto antes de que el usuario (o sistema externo) comience a interactuar con el sistema (en los WHEN). Es importante evitar hablar sobre la interacción del usuario en este patrón.
+WHEN | WHEN es la segundo requisito del patrón ‘Given-When-Then’. Se utilizan para describir un evento o una acción. Puede ser una persona que interactúa con el sistema o puede ser un evento desencadenado por otro sistema.
+THEN | THEN, la última descripción del patrón ‘Given-When-Then’.  Se utilizan para describir el resultado esperado. La definición de un THEN debe usar una aserción para comparar el resultado real (lo que el sistema realmente hace) con el resultado esperado (lo que se supone que debe hacer el sistema).
+AND | AND se utiliza para añadir alguna condición más en alguno de los patrones Given, When o Then
+BUT | Al igual que el AND se utiliza en los patrones Given, When o Then, pero en este caso se utiliza como condición extra.
+BACKGROUND | Ocasionalmente, te encontrarás repitiendo los mismos GIVEN en muchos SCENARIO de una FEATURE. Si es el caso, como se repite en cada escenario, esto es una indicación de que los patrones no son esenciales para describir los escenarios; Son detalles generales. Literalmente, puedes moverlos agrupándolos en un BACKGROUND.
+SCENARIO OUTLINE | El SCENARIO OUTLINE se puede usar para ejecutar varios SCENARIO varias veces, con diferentes combinaciones de valores.
+""" | Doc Strings o “”” es útil si necesitas añadir mucha información a los patrones.
+@ | Prefijo para una etiqueta: @. Las etiquetas pueden ser colocadas antes de los patrones o SCENARIO. El objetivo principal es ayudarte a filtrar SCENARIOs.
+# | Para definir comentarios. Solo se permiten al comienzo de una nueva línea.
+
+
+Estos elementos nos ayudan a que todos esos comportamientos vayan poco a poco bajando de nivel, hasta llegar a un lenguaje que entiendan fácilmente los desarrolladores.
 ## Manual Behave
 
 El desarrollo impulsado por el comportamiento (o BDD) es una técnica de desarrollo de software ágil que fomenta la colaboración entre desarrolladores, QA y participantes no técnicos o comerciales en un proyecto de software.
@@ -137,13 +160,13 @@ Un *feature file* tiene un formato de lenguaje natural que describe una caracter
 
 Las partes “Given”, “When” y “Then” de esta prosa forman los pasos reales que tomará el comportamiento para probar su sistema. Estos se asignan a implementaciones de pasos de Python . Como guía general:
 
-*Given* ponemos el sistema en un estado conocido antes de que el usuario (o sistema externo) comience a interactuar con el sistema (en los pasos Cuándo). Evite hablar de la interacción del usuario en situaciones dadas.
+**Given** ponemos el sistema en un estado conocido antes de que el usuario (o sistema externo) comience a interactuar con el sistema (en los pasos Cuándo). Evite hablar de la interacción del usuario en situaciones dadas.
 
-*When* tomamos acciones clave que el usuario (o sistema externo) lleva a cabo. Esta es la interacción con su sistema que debería (o tal vez no debería) hacer que algún estado cambie.
+**When** tomamos acciones clave que el usuario (o sistema externo) lleva a cabo. Esta es la interacción con su sistema que debería (o tal vez no debería) hacer que algún estado cambie.
 
-*Then* observamos los resultados.
+**Then** observamos los resultados.
 
-También puede incluir "And" o "But" como un step; se les cambia el nombre por behave para tomar el nombre del paso anterior, por lo que:
+También puede incluir **And** o **But** como un step; se les cambia el nombre por behave para tomar el nombre del paso anterior, por lo que:
 
     Scenario: barajar
         Given un mazo para jugar 21
@@ -174,7 +197,30 @@ A veces, un scenario debe ejecutarse con una serie de variables que proporcionen
 behave ejecutará el scenario una vez por cada línea (sin encabezado) que aparezca en las tablas de datos de ejemplo.
 ### Python Step Implementations
 
-### Context
+Los pasos utilizados en los escenarios se implementan en archivos de Python en el directorio "steps". Puede llamarlos como quiera siempre que utilicen la extensión *.py de archivo python. No es necesario que le digas a behave cuáles usar; los usará todos.
+
+Los **Steps** se identifican utilizando decoradores que coinciden con el predicado del archivo de características: given, when, then and step (las variantes con el título también están disponibles si esa es su preferencia). El decorador acepta una cadena que contiene el resto de la frase utilizada en el escenario paso al que pertenece.
+
+Dado un escenario:
+
+    Scenario Outline: valor de la mano
+        Given una <mano> para sumar sus cartas
+        When el jugador suma la mano
+        Then el <valor> es correcto
+
+El código de step que implementa los steps podría verse así:
+
+    @given('una {mano} para sumar sus cartas')
+    def step(context, mano):
+        context.mano = Mano(mano.split(";"))
+
+    @when('el jugador suma la mano')
+    def step(context):
+        context.valor = context.mano.evaluar()
+
+    @then('el {valor:d} es correcto')
+    def step(context, valor):
+        assert context.valor == valor
 
 ### Equipo de trabajo
 
