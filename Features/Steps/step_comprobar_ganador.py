@@ -11,6 +11,6 @@ def step(context):
     context.valor_1 = context.mano_1.evaluar()
     context.valor_2 = context.mano_2.evaluar()
 
-@then('el {valor_1:d} y el {valor_2:d} son correctos')
+@then('el {valor_1:d} y el {valor_2:d} son acertados')
 def step(context,valor_1,valor_2):
     assert context.valor_1 == valor_1 and context.valor_2 == valor_2

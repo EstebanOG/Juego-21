@@ -1,4 +1,4 @@
-  
+
 Feature: comprobar ganador
 
     Como repartidor quiero saber el valor de las manos para determinar quién gana.
@@ -6,11 +6,11 @@ Feature: comprobar ganador
 Scenario Outline: Conocer el valor de las manos para determinar el ganador
 Given <mano_1> y <mano_2> para determinar sus valores
 When los jugadores se terminan su turno
-Then el <valor_1> y el <valor_2> son correctos
+Then el <valor_1> y el <valor_2> son acertados
 
 Examples:
-    | mano_1                                 |valor_1  | mano_2                                        | valor_2|
-    |(5, picas);(J, treboles)                |15        |(9, corazones);(A, treboles)                        |20     |
-    |(3, diamantes);(Q, picas)               |13        |(A, picas);(A, treboles)                            |12     |
-    |(A, diamantes);(J, treboles)            |21        |(5, picas);(J, treboles);(3, treboles)              |18     |
-    |(A, picas);(A, treboles);(A, diamantes) |13         |(A, picas);(A, treboles);(A, diamantes);(Q, picas)  |13     |
+    | mano_1                                    |valor_1  | mano_2                                              | valor_2|
+    |(4, corazones);(K, treboles)               |14       |(10, corazones);(A, corazones)                       |21      |
+    |(7, diamantes);(J, treboles)               |17       |(6, corazones);(10, picas)                           |16      |
+    |(3, corazones);(K, treboles)               |13       |(A, corazones);(A, treboles)                         |12      |
+    |(8, treboles);(10, corazones)              |18       |(7, picas);(Q, diamantes)                            |17      |
